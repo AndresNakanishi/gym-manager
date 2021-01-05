@@ -60,6 +60,13 @@
 
   <!-- Custom scripts for all pages-->
   <?= $this->Html->script('/js/sb-admin-2.min.js'); ?>
+
+  <!-- Page level plugins -->
+  <?= $this->Html->script('/vendor/datatables/jquery.dataTables.min.js'); ?>
+  <?= $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js'); ?>
+
+  <!-- Page level custom scripts -->
+  <?= $this->Html->script('/js/demo/datatables-demo.js'); ?>
   <?= $this->fetch('scriptBottom') ?>
   <?= $this->Flash->render() ?>
 </body>
