@@ -1,0 +1,70 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * CivilStatus Model
+ *
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\HasMany $Users
+ *
+ * @method \App\Model\Entity\CivilStatus newEmptyEntity()
+ * @method \App\Model\Entity\CivilStatus newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\CivilStatus[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\CivilStatus get($primaryKey, $options = [])
+ * @method \App\Model\Entity\CivilStatus findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\CivilStatus patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\CivilStatus[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\CivilStatus|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\CivilStatus saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\CivilStatus[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\CivilStatus[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\CivilStatus[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\CivilStatus[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ */
+class CivilStatusTable extends Table
+{
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('civil_status');
+        $this->setDisplayField('description');
+        $this->setPrimaryKey('id');
+
+        $this->hasMany('Users', [
+            'foreignKey' => 'civil_status_id',
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->nonNegativeInteger('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('description')
+            ->maxLength('description', 80)
+            ->allowEmptyString('description');
+
+        return $validator;
+    }
+}
