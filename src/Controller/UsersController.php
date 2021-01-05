@@ -63,11 +63,11 @@ class UsersController extends AppController
             $newUser["password"] = $newUser["dni"];
             $user = $this->Users->patchEntity($user, $newUser);
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('Cliente creado correctamente.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('Hubo un error en la base de datos.'));
         }
         $profiles = $this->Users->Profiles->find('list', ['contain' => ['Levels']])->where(['levels.number' => 3]);
         $civilStatus = $this->Users->CivilStatus->find('list');
@@ -95,11 +95,11 @@ class UsersController extends AppController
             $newData["birthday"] = new FrozenTime($newData["birthday"]);
             $user = $this->Users->patchEntity($user, $newData);
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('Datos del Cliente guardado correctamente.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('Hubo un error en la base de datos.'));
         }
         $profiles = $this->Users->Profiles->find('list', ['contain' => ['Levels']])->where(['levels.number !=' => 0]);
         $routines = $this->Users->Routines->find('list');
@@ -258,12 +258,31 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'dashboard']);
     }
 
+    public function createFirstUser()
+    {
+        $this->autoRender = false;
+        $users = $this->Users->find('all')->count();
+
+        if($users == 0){
+            $user = $this->Users->newEmptyEntity();
+            $user->profile_id = 1;
+            $user->name = "Ricardo Andrés";
+            $user->surname = "Nakanishi";
+            $user->dni = "40882532";
+            $user->password = $user->dni;
+            $user->birthday = new FrozenTime("23-07-1997");
+            if ($this->Users->save($user)) {
+                return $this->redirect(['action' => 'login']);
+            }
+        }
+        return $this->redirect(['controller' => 'Pages','action' => 'home']);
+    }
 
     
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->allowUnauthenticated(['login']);
+        $this->Authentication->allowUnauthenticated(['login', 'createFirstUser']);
     }
 }
