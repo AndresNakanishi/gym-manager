@@ -57,12 +57,12 @@
     </li>
 
     <!-- Nav Item - Usuarios -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link" href="<?= $this->Url->buildFromPath('Memberships::index'); ?>">
             <i class="fas fa-id-card"></i>
             <span>Membresías</span>
         </a>
-    </li>
+    </li> -->
 
     <!-- Nav Item - Asistencias -->
     <li class="nav-item">

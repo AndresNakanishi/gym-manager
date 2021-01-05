@@ -54,6 +54,8 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->connect('/dashboard', ['controller' => 'Users', 'action' => 'dashboard']);
     $builder->connect('/login', ['controller' => 'Users', 'action' => 'login']);
 
+
+    $builder->connect('/create-first-user', ['controller' => 'Users', 'action' => 'createFirstUser']);
     /*
      * Connect catchall routes for all controllers.
      *
