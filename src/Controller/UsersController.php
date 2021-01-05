@@ -89,6 +89,7 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => [],
         ]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $newData = $this->request->getData();
             $newData["birthday"] = new FrozenTime($newData["birthday"]);
@@ -108,6 +109,69 @@ class UsersController extends AppController
         
         $this->set('title', 'Editar Cliente');
         $this->set(compact('user', 'profiles', 'routines', 'civilStatus', 'bloodType', 'sex'));
+    }
+
+
+    public function profile($id = null)
+    {
+        $user_id = $_SESSION['Auth']->id;
+        
+        if (strval($user_id) !== $id) {
+            $this->Flash->warning(__('No podes ver los datos de otro <b>mostri</b>.'));
+            return $this->redirect(['action' => 'profile', $user_id]);
+        }
+        
+        $user = $this->Users->get($id, [
+            'contain' => [],
+        ]);
+        
+        $this->set('title', 'Mi Perfil');
+        $this->set(compact('user'));
+    }
+    
+    public function changePassword($id = null)
+    {
+        $user_id = $_SESSION['Auth']->id;
+        
+        if (strval($user_id) !== $id) {
+            $this->Flash->warning(__('No podes cambiar la pass de otro <b>mostri</b>.'));
+            return $this->redirect(['action' => 'changePassword', $user_id]);
+        }
+
+        $user = $this->Users->get($id, [
+            'contain' => [],
+        ]);
+        
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $password = $data['new_password'];
+            $new_password_confirm = $data['new_password_confirm'];
+            $new_password = [
+                'password' => $password
+            ];
+            if ($password !== $new_password_confirm){
+                $this->Flash->error(__('Las contraseñas nuevas no coinciden.'));
+                return $this->redirect(['action' => 'changePassword', $user_id]);
+            }
+            
+            if  (!(new DefaultPasswordHasher())->check($data['old_password'], $user->password)) {
+           
+                $this->Flash->error(__('La contraseña anterior es errónea.'));
+                return $this->redirect(['action' => 'changePassword', $user_id]);
+               
+            }
+            
+            $user = $this->Users->patchEntity($user, $new_password);
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('Se ha cambiado la contraseña correctamente.'));
+                return $this->redirect(['action' => 'profile', $user_id]);
+            } else {
+                $this->Flash->error(__('No se ha podido cambiar la contraseña. Por favor conáctese con el administrador del sistema'));
+            }
+        }
+
+        $this->set('title', 'Cambiar Contraseña');
+        $this->set(compact('user'));
     }
 
     public function dashboard()

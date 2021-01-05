@@ -120,7 +120,7 @@
                             'class' => 'form-control',
                             'label' => [
                                 'class' => 'control-label',
-                                'text' => 'Tipo de membresía: (Requerido)',
+                                'text' => 'Perfil: (Requerido)',
                             ],
                             'required'
                         ]) ?>

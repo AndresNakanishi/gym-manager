@@ -1,7 +1,9 @@
 <?php
     $this->assign('title', $title);
 ?>
-<div class="row">
+
+<h1>En construcción</h1>
+<!-- <div class="row">
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
@@ -300,3 +302,4 @@
         </div>
     </div>
 </div>
+ -->
